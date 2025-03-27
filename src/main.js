@@ -2,15 +2,18 @@ import TripMainInfoView from './view/trip-main-info-view';
 import TripFiltersView from './view/trip-filters-view';
 import EventsPresenter from './presenter/events-presenter';
 import { render, RenderPosition } from './render';
+import OffersModel from './model/offer-model.js';
+import PointsModel from './model/point-model.js';
 
 
 const tripMainHeaderContainer = document.querySelector('.trip-main');
 const tripControlsFiltersContainer = document.querySelector('.trip-controls__filters');
 const tripEventsContainer = document.querySelector('.trip-events');
+const pointsModel = new PointsModel();
+const offersModel =  new OffersModel();
+const eventsPresenter = new EventsPresenter();
 
-render(new TripMainInfoView, tripMainHeaderContainer, RenderPosition.AFTERBEGIN);
+render(new TripMainInfoView(pointsModel.get()), tripMainHeaderContainer, RenderPosition.AFTERBEGIN);
 render(new TripFiltersView, tripControlsFiltersContainer);
 
-const eventsPresenter = new EventsPresenter;
-
-eventsPresenter.init(tripEventsContainer);
+eventsPresenter.init(tripEventsContainer, pointsModel, offersModel);

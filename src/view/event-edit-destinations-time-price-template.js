@@ -1,23 +1,26 @@
+import { humanizeEventFullDate } from '../utils';
+const createEventEditDestinationTimePriceTemplate = (point) => {
+  const {basePrice, dateFrom, dateTo, destination} = point;
 
-const createEventEditDestinationTimePriceTemplate = () => `
+  return `
                   <div class="event__field-group  event__field-group--destination">
                     <label class="event__label  event__type-output" for="event-destination-1">
                       Flight
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${destination.name} list="destination-list-1">
                     <datalist id="destination-list-1">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
+                      <option value=""></option>
+                      <option value=""></option>
+                      <option value=""></option>
                     </datalist>
                   </div>
 
-                  <div class="event__field-group  event__field-group--time">
+                  <div class="event__field-group event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="19/03/19 00:00">
-                    &mdash;
+                    <input class="event__input event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeEventFullDate(dateFrom)}">
+                     &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="19/03/19 00:00">
+                    <input class="event__input event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizeEventFullDate(dateTo)}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">
@@ -25,7 +28,7 @@ const createEventEditDestinationTimePriceTemplate = () => `
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value=${basePrice}>
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -33,6 +36,6 @@ const createEventEditDestinationTimePriceTemplate = () => `
                   <button class="event__rollup-btn" type="button">
                     <span class="visually-hidden">Open event</span>
                   </button>
-`;
+`;};
 
 export {createEventEditDestinationTimePriceTemplate};
