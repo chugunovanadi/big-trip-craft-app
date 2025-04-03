@@ -8,21 +8,20 @@ export default class EventsPresenter {
   sortComponent =  new TripEventsSortView();
   listComponent = new TripEventsListView();
 
-//учим принимать модельку EventEditView и TripEventItemView
   init(container, pointsModel, offersModel) {
     this.container=container;
-    this.pointsModel = pointsModel; //передаем их снаружи в мейне
+    this.pointsModel = pointsModel;
     this.offersModel = offersModel;
     this.points = [...this.pointsModel.get()];
 
-    console.log(this.points);
-    console.log(this.offersModel.get(this.points[0]));
-
     render(this.sortComponent, this.container);
     render(this.listComponent, this.container);
-    render(new EventEditView(this.points[0], this.offersModel.get(this.points[0])), this.listComponent.getElement());
+
+    const {  offersById: firstOffersById, offersByType: firstOffersByType } = this.offersModel.get(this.points[0]);
+    render(new EventEditView(this.points[0], firstOffersById, firstOffersByType), this.listComponent.getElement());
     for (let i = 0; i < this.points.length; i++) {
-      render(new TripEventItemView(this.points[i], this.offersModel.get(this.points[i])), this.listComponent.getElement());
+      const { offersById: currentOffersById, offersByType: currentOffersByType } = this.offersModel.get(this.points[i]);
+      render(new TripEventItemView(this.points[i], currentOffersById, currentOffersByType), this.listComponent.getElement());
     }
   }
 }

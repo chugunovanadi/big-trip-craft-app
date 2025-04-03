@@ -5,14 +5,14 @@ import { createEventEditOffersTemplate } from './event-edit-offers-template';
 import { createEventEditDescriptionDestinationTemplate } from './event-edit-description-destination-template';
 import { isDestinationEmpty, isOffersEmpty } from '../utils.js';
 
-const createEventEditTemplate = (point = {}, offers) => {
+const createEventEditTemplate = (point = {}, offersById, offersByType) => {
   const {
     id = '',
     basePrice = null,
     dateFrom = null,
     dateTo = null,
     isFavorite = null,
-    destination = {},
+    destination = null,
     type = '',
   } = point;
   return`
@@ -24,7 +24,7 @@ const createEventEditTemplate = (point = {}, offers) => {
     </header>
 
     <section class="event__details">
-      ${isOffersEmpty(point) ? createEventEditOffersTemplate(offers) : ''}
+      ${isOffersEmpty(point) ? createEventEditOffersTemplate(offersById, offersByType) : ''}
       ${isDestinationEmpty(point) ? createEventEditDescriptionDestinationTemplate(point) : ''}
     </section>
  </form>
@@ -32,13 +32,14 @@ const createEventEditTemplate = (point = {}, offers) => {
 `;};
 
 export default class EventEditView {
-  constructor(point, offers){
+  constructor(point, offersById, offersByType){
     this.point=point;
-    this.offers=offers;
+    this.offersById=offersById;
+    this.offersByType = offersByType;
   }
 
   getTemplate(){
-    return createEventEditTemplate(this.point, this.offers);
+    return createEventEditTemplate(this.point, this.offersById, this.offersByType);
   }
 
   getElement() {

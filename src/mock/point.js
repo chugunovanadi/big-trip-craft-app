@@ -1,8 +1,8 @@
 import {getRandomValue, getRandomBoolean, getRandomInteger} from '../utils.js';
 import { generateDestinations } from './destination.js';
 
-const POINT_COUNT = 8;
-const MAX_OFFER_COUNT = 5;
+const POINT_COUNT = 6;
+const MAX_OFFER_COUNT = 3;
 const pointType = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const price = [1100, 500, 200, 1500, 700, 500];
 const dateFrom = ['2019-07-04T12:10:05.432Z', '2019-07-05T06:59:59.999Z'];
@@ -31,4 +31,4 @@ const generatePoints = () => {
     };
   });
 };
-export {generatePoints};
+export {generatePoints, pointType};

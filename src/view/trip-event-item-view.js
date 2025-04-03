@@ -1,7 +1,7 @@
 import {createElement} from '../render.js';
 import { humanizeEventDateDay, humanizeEventDateTime, formatEventDuration } from '../utils.js';
 
-const createTripEventOffersTemplate = (offers) => offers.map(({titleOffer, priceOffer}) =>`
+const createTripEventOffersTemplate = (offersById) => offersById.map(({titleOffer, priceOffer}) =>`
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
                   <li class="event__offer">
@@ -12,7 +12,7 @@ const createTripEventOffersTemplate = (offers) => offers.map(({titleOffer, price
                 </ul>
 `).join('');
 
-const createTripEventItemTemplate = (point, offers) => {
+const createTripEventItemTemplate = (point, offersById) => {
   const {basePrice, dateFrom, dateTo, isFavorite, destination, type} = point;
   const favoriteClassName = isFavorite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
   return `
@@ -37,7 +37,7 @@ const createTripEventItemTemplate = (point, offers) => {
 
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                    ${createTripEventOffersTemplate(offers)}
+                    ${createTripEventOffersTemplate(offersById)}
                 </ul>
                 <button class="${favoriteClassName}" type="button">
                   <span class="visually-hidden">Add to favorite</span>
@@ -53,13 +53,14 @@ const createTripEventItemTemplate = (point, offers) => {
 `;};
 
 export default class TripEventItemView {
-  constructor(point, offers) {
+  constructor(point, offersById, offersByType) {
     this.point = point;
-    this.offers = offers;
+    this.offersById = offersById;
+    this.offersByType = offersByType;
   }
 
   getTemplate() {
-    return createTripEventItemTemplate(this.point, this.offers);
+    return createTripEventItemTemplate(this.point, this.offersById, this.offersByType);
   }
 
   getElement() {

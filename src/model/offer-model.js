@@ -6,9 +6,50 @@ export default class OffersModel {
 
   get = (point) => {
     if (!point.offers) {
-      return [];
+      return { offersById: [], offersByType: null };
     }
-    this.offersById = this.allOffers.filter((offer) => point.offers.includes(offer.id));
-    return this.offersById;
+
+    const offersByType = this.allOffers.find((offer) => offer.type === point.type);
+    const offersById = offersByType.offers.filter((obj) => point.offers.includes(obj.id));
+
+    return {
+      offersById,
+      offersByType
+    };
   };
 }
+
+
+// export default class OffersModel {
+
+//   allOffers = generateOffers();
+
+//   get = (point) => {
+//     if (!point.offers) {
+//       return [];
+//     }
+//     const offersByType = this.allOffers.find((offer) => offer.type === point.type);
+//     const offersById = offersByType.offers.filter((obj) => point.offers.includes(obj.id));
+//     return offersById;
+//   };
+// }
+
+// export default class OffersModel {
+
+//   allOffers = generateOffers();
+//   offersById = [];
+//   offersByType = null;
+
+//   get = (point) => {
+//     if (!point.offers) {
+//       this.offersById = [];
+//       this.offersByType = null;
+//       return;
+//     }
+//     this.offersByType = this.allOffers.find((offer) => offer.type === point.type);
+//     this.offersById = this.offersByType.offers.filter((obj) => point.offers.includes(obj.id));
+//   };
+
+//   getOffersById = () => this.offersById;
+//   getOffersByType = () => this.offersByType;
+// };
