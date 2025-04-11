@@ -2,6 +2,7 @@ import TripEventsSortView from '../view/trip-events-sort-view';
 import TripEventItemView from '../view/trip-event-item-view';
 import TripEventsListView from '../view/trip-events-list-view';
 import EventEditView from '../view/event-edit-view';
+import TripEventsListEmptyView from '../view/trip-events-list-empty-view';
 import { render } from '../render';
 
 export default class EventsPresenter {
@@ -24,6 +25,10 @@ export default class EventsPresenter {
   }
 
   #renderPointsBoard = () => {
+    if (this.#points.length === 0) {
+      render(new TripEventsListEmptyView, this.#container);
+      return;
+    }
     render(this.#sortComponent, this.#container);
     render(this.#listComponent, this.#container);
     for (let i = 0; i < this.#points.length; i++) {
@@ -44,6 +49,14 @@ export default class EventsPresenter {
       container.element.replaceChild(eventItemComponent.element, eventEditComponent.element);
     };
 
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        replaceEditToPoint();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
     eventItemComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replacePointToEdit();
     });
@@ -51,18 +64,24 @@ export default class EventsPresenter {
     eventEditComponent.element.querySelector('.event--edit').addEventListener('submit', (evt) => {
       evt.preventDefault();
       replaceEditToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
     });
 
     eventEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceEditToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
     });
 
     eventEditComponent.element.querySelector('.event__reset-btn').addEventListener('click', () => {
       replaceEditToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    render(eventItemComponent, container.element);
+    document.addEventListener('keydown', onEscKeyDown);
 
+    render(eventItemComponent, container.element);
   };
+
+
 
 }
