@@ -1,55 +1,29 @@
 import { generateOffers } from '../mock/offer';
 
 export default class OffersModel {
+  #allOffers = generateOffers();
+  #point = null;
 
-  allOffers = generateOffers();
+  set currentPoint(newPoint) {
+    this.#point = newPoint;
+  }
 
-  get = (point) => {
-    if (!point.offers) {
-      return { offersById: [], offersByType: null };
+  get currentPoint() {
+    return this.#point;
+  }
+
+  get currentOffersByType() {
+    if (!this.#point || !this.#point.offers) {
+      return null;
     }
+    return this.#allOffers.find((offer) => offer.type === this.#point.type);
+  }
 
-    const offersByType = this.allOffers.find((offer) => offer.type === point.type);
-    const offersById = offersByType.offers.filter((obj) => point.offers.includes(obj.id));
-
-    return {
-      offersById,
-      offersByType
-    };
-  };
+  get currentOffersById() {
+    if (!this.#point || !this.#point.offers) {
+      return [];
+    }
+    const offersByType = this.currentOffersByType;
+    return offersByType.offers.filter((obj) => this.#point.offers.includes(obj.id));
+  }
 }
-
-
-// export default class OffersModel {
-
-//   allOffers = generateOffers();
-
-//   get = (point) => {
-//     if (!point.offers) {
-//       return [];
-//     }
-//     const offersByType = this.allOffers.find((offer) => offer.type === point.type);
-//     const offersById = offersByType.offers.filter((obj) => point.offers.includes(obj.id));
-//     return offersById;
-//   };
-// }
-
-// export default class OffersModel {
-
-//   allOffers = generateOffers();
-//   offersById = [];
-//   offersByType = null;
-
-//   get = (point) => {
-//     if (!point.offers) {
-//       this.offersById = [];
-//       this.offersByType = null;
-//       return;
-//     }
-//     this.offersByType = this.allOffers.find((offer) => offer.type === point.type);
-//     this.offersById = this.offersByType.offers.filter((obj) => point.offers.includes(obj.id));
-//   };
-
-//   getOffersById = () => this.offersById;
-//   getOffersByType = () => this.offersByType;
-// };

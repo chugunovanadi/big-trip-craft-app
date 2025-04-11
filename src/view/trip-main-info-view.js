@@ -1,38 +1,40 @@
 import { createElement } from '../render';
-import { humanizeEventDateDay } from '../utils';
 
-const createTripMainInfoTemplate = (point) => `
+const createTripMainInfoTemplate = () => `
   <section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
-              <h1 class="trip-info__title">${point[0].destination.name} &mdash; ${point[1].destination.name} &mdash; ${point[2].destination.name} &mdash; ${point[3].destination.name}</h1>
+          <h1 class="trip-info__title"> &mdash;  &mdash;  &mdash; </h1>
 
-              <p class="trip-info__dates">${humanizeEventDateDay(point[0].dateFrom)}&nbsp;&mdash;&nbsp; ${humanizeEventDateDay(point[0].dateTo)}</p>
+          <p class="trip-info__dates"> &nbsp; &mdash; &nbsp; </p>
     </div>
 
-            <p class="trip-info__cost">
-              Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
-            </p>
+          <p class="trip-info__cost">
+            Total: &euro;&nbsp;<span class="trip-info__cost-value"> </span>
+          </p>
   </section>
 `;
 
 export default class TripMainInfoView {
+  #point = null;
+  #element = null;
+
   constructor(point) {
-    this.point = point;
+    this.#point = point;
   }
 
-  getTemplate() {
-    return createTripMainInfoTemplate(this.point);
+  get template() {
+    return createTripMainInfoTemplate(this.#point);
   }
 
-  getElement(){
-    if (!this.element){
-      this.element = createElement(this.getTemplate());
+  get element(){
+    if (!this.#element){
+      this.#element = createElement(this.template);
 
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement(){
-    this.element=null;
+    this.#element=null;
   }
 }

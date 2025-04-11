@@ -32,25 +32,30 @@ const createEventEditTemplate = (point = {}, offersById, offersByType) => {
 `;};
 
 export default class EventEditView {
+  #element = null;
+  #point = null;
+  #offersById = null;
+  #offersByType = null;
+
   constructor(point, offersById, offersByType){
-    this.point=point;
-    this.offersById=offersById;
-    this.offersByType = offersByType;
+    this.#point=point;
+    this.#offersById=offersById;
+    this.#offersByType = offersByType;
   }
 
-  getTemplate(){
-    return createEventEditTemplate(this.point, this.offersById, this.offersByType);
+  get template(){
+    return createEventEditTemplate(this.#point, this.#offersById, this.#offersByType);
   }
 
-  getElement() {
-    if (!this.element){
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element){
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element=null;
+    this.#element = null;
   }
 
 }

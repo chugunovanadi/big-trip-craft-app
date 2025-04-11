@@ -11,9 +11,9 @@ const tripControlsFiltersContainer = document.querySelector('.trip-controls__fil
 const tripEventsContainer = document.querySelector('.trip-events');
 const pointsModel = new PointsModel();
 const offersModel =  new OffersModel();
-const eventsPresenter = new EventsPresenter();
+const eventsPresenter = new EventsPresenter(tripEventsContainer, pointsModel, offersModel);
 
-render(new TripMainInfoView(pointsModel.get()), tripMainHeaderContainer, RenderPosition.AFTERBEGIN);
+render(new TripMainInfoView(pointsModel.points), tripMainHeaderContainer, RenderPosition.AFTERBEGIN);
 render(new TripFiltersView, tripControlsFiltersContainer);
 
-eventsPresenter.init(tripEventsContainer, pointsModel, offersModel);
+eventsPresenter.init();

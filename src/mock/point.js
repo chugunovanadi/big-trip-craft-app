@@ -1,7 +1,7 @@
 import {getRandomValue, getRandomBoolean, getRandomInteger} from '../utils.js';
 import { generateDestinations } from './destination.js';
 
-const POINT_COUNT = 6;
+const POINT_COUNT = 3;
 const MAX_OFFER_COUNT = 3;
 const pointType = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const price = [1100, 500, 200, 1500, 700, 500];

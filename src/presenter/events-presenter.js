@@ -5,23 +5,64 @@ import EventEditView from '../view/event-edit-view';
 import { render } from '../render';
 
 export default class EventsPresenter {
-  sortComponent =  new TripEventsSortView();
-  listComponent = new TripEventsListView();
+  #sortComponent =  new TripEventsSortView();
+  #listComponent = new TripEventsListView();
+  #container = null;
+  #pointsModel = null;
+  #offersModel = null;
+  #points = null;
 
-  init(container, pointsModel, offersModel) {
-    this.container=container;
-    this.pointsModel = pointsModel;
-    this.offersModel = offersModel;
-    this.points = [...this.pointsModel.get()];
-
-    render(this.sortComponent, this.container);
-    render(this.listComponent, this.container);
-
-    const {  offersById: firstOffersById, offersByType: firstOffersByType } = this.offersModel.get(this.points[0]);
-    render(new EventEditView(this.points[0], firstOffersById, firstOffersByType), this.listComponent.getElement());
-    for (let i = 0; i < this.points.length; i++) {
-      const { offersById: currentOffersById, offersByType: currentOffersByType } = this.offersModel.get(this.points[i]);
-      render(new TripEventItemView(this.points[i], currentOffersById, currentOffersByType), this.listComponent.getElement());
-    }
+  constructor(container, pointsModel, offersModel) {
+    this.#container = container;
+    this.#pointsModel = pointsModel;
+    this.#offersModel = offersModel;
   }
+
+  init() {
+    this.#points = [...this.#pointsModel.points];
+    this.#renderPointsBoard();
+  }
+
+  #renderPointsBoard = () => {
+    render(this.#sortComponent, this.#container);
+    render(this.#listComponent, this.#container);
+    for (let i = 0; i < this.#points.length; i++) {
+      this.#offersModel.currentPoint = this.#points[i]; //сеттер currentPoint
+      this.#renderPoint(this.#points[i], this.#offersModel.currentOffersById, this.#offersModel.currentOffersByType, this.#listComponent);
+    }
+  };
+
+  #renderPoint = (point, offersById, offersByType, container) => {
+    const eventItemComponent = new TripEventItemView(point, offersById, offersByType);
+    const eventEditComponent = new EventEditView(point, offersById, offersByType);
+
+    const replacePointToEdit = () => {
+      container.element.replaceChild(eventEditComponent.element, eventItemComponent.element);
+    };
+
+    const replaceEditToPoint = () => {
+      container.element.replaceChild(eventItemComponent.element, eventEditComponent.element);
+    };
+
+    eventItemComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replacePointToEdit();
+    });
+
+    eventEditComponent.element.querySelector('.event--edit').addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      replaceEditToPoint();
+    });
+
+    eventEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replaceEditToPoint();
+    });
+
+    eventEditComponent.element.querySelector('.event__reset-btn').addEventListener('click', () => {
+      replaceEditToPoint();
+    });
+
+    render(eventItemComponent, container.element);
+
+  };
+
 }

@@ -53,25 +53,30 @@ const createTripEventItemTemplate = (point, offersById) => {
 `;};
 
 export default class TripEventItemView {
+  #point = null;
+  #offersById = null;
+  #offersByType = null;
+  #element = null;
+
   constructor(point, offersById, offersByType) {
-    this.point = point;
-    this.offersById = offersById;
-    this.offersByType = offersByType;
+    this.#point = point;
+    this.#offersById = offersById;
+    this.#offersByType = offersByType;
   }
 
-  getTemplate() {
-    return createTripEventItemTemplate(this.point, this.offersById, this.offersByType);
+  get template() {
+    return createTripEventItemTemplate(this.#point, this.#offersById, this.#offersByType);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement(){
-    this.element = null;
+    this.#element = null;
   }
 
 }
