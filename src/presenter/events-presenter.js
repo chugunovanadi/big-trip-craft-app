@@ -3,7 +3,7 @@ import TripEventItemView from '../view/trip-event-item-view';
 import TripEventsListView from '../view/trip-events-list-view';
 import EventEditView from '../view/event-edit-view';
 import TripEventsListEmptyView from '../view/trip-events-list-empty-view';
-import { render } from '../render';
+import { render, replace } from '../framework/render';
 
 export default class EventsPresenter {
   #sortComponent =  new TripEventsSortView();
@@ -42,11 +42,11 @@ export default class EventsPresenter {
     const eventEditComponent = new EventEditView(point, offersById, offersByType);
 
     const replacePointToEdit = () => {
-      container.element.replaceChild(eventEditComponent.element, eventItemComponent.element);
+      replace(eventEditComponent, eventItemComponent);
     };
 
     const replaceEditToPoint = () => {
-      container.element.replaceChild(eventItemComponent.element, eventEditComponent.element);
+      replace(eventItemComponent, eventEditComponent);
     };
 
     const onEscKeyDown = (evt) => {
@@ -57,22 +57,19 @@ export default class EventsPresenter {
       }
     };
 
-    eventItemComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
-      replacePointToEdit();
-    });
+    eventItemComponent.setClickHandler(() => replacePointToEdit());
 
-    eventEditComponent.element.querySelector('.event--edit').addEventListener('submit', (evt) => {
-      evt.preventDefault();
+    eventEditComponent.setEditFormSubmitHandler(() => {
       replaceEditToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    eventEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    eventEditComponent.setEditClickHandler(() => {
       replaceEditToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    eventEditComponent.element.querySelector('.event__reset-btn').addEventListener('click', () => {
+    eventEditComponent.setEditResetClickHandler(() => {
       replaceEditToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
     });
@@ -81,7 +78,5 @@ export default class EventsPresenter {
 
     render(eventItemComponent, container.element);
   };
-
-
 
 }
