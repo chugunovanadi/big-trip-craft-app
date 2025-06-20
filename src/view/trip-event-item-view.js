@@ -55,26 +55,34 @@ const createTripEventItemTemplate = (point, offersById) => {
 export default class TripEventItemView extends AbstractView {
   #point = null;
   #offersById = null;
-  #offersByType = null;
 
-  constructor(point, offersById, offersByType) {
+  constructor(point, offersById) {
     super();
     this.#point = point;
     this.#offersById = offersById;
-    this.#offersByType = offersByType;
   }
 
   get template() {
-    return createTripEventItemTemplate(this.#point, this.#offersById, this.#offersByType);
+    return createTripEventItemTemplate(this.#point, this.#offersById);
   }
 
-  setClickHandler = (callback) => {
-    this._callback.click = callback;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
+  setRollupClickHandler = (callback) => {
+    this._callback.clickRollup = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollupClickHandler);
   };
 
-  #clickHandler = (evt) => {
+  setFavoriteClickHandler = (callback) => {
+    this._callback.clickFavorite = callback;
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
+  };
+
+  #rollupClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.clickRollup();
+  };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.clickFavorite ();
   };
 }

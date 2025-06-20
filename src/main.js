@@ -1,7 +1,7 @@
 import TripMainInfoView from './view/trip-main-info-view';
 import TripFiltersView from './view/trip-filters-view';
 import EventsPresenter from './presenter/events-presenter';
-import { render, RenderPosition } from './render';
+import { render, RenderPosition } from './framework/render.js';
 import OffersModel from './model/offer-model.js';
 import PointsModel from './model/point-model.js';
 

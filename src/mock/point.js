@@ -1,5 +1,6 @@
 import {getRandomValue, getRandomBoolean, getRandomInteger} from '../utils.js';
 import { generateDestinations } from './destination.js';
+import { nanoid } from 'nanoid';
 
 const POINT_COUNT = 5;
 const MAX_OFFER_COUNT = 3;
@@ -20,12 +21,12 @@ const generatePoint = () => ({
 const generatePoints = () => {
   let totalOfferCount = 0;
   const points = Array.from({length: POINT_COUNT}, generatePoint);
-  return points.map((point, index) => {
+  return points.map((point) => {
     const hasOffers = getRandomInteger(0,1);
     const countOffer = (hasOffers)  ? getRandomInteger(1, MAX_OFFER_COUNT) : 0;
     totalOfferCount += countOffer;
     return {
-      id: String(index+1),
+      id: nanoid(),
       ...point,
       offers: (hasOffers) ? Array.from({length: countOffer}, (_, offerIndex) => String(totalOfferCount - offerIndex)) : [],
     };

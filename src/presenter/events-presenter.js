@@ -1,9 +1,9 @@
 import TripEventsSortView from '../view/trip-events-sort-view';
-import TripEventItemView from '../view/trip-event-item-view';
 import TripEventsListView from '../view/trip-events-list-view';
-import EventEditView from '../view/event-edit-view';
 import TripEventsListEmptyView from '../view/trip-events-list-empty-view';
-import { render, replace } from '../framework/render';
+import {render} from '../framework/render';
+import PointPresenter from './point-presenter';
+import { updateItem } from '../utils';
 
 export default class EventsPresenter {
   #sortComponent =  new TripEventsSortView();
@@ -12,6 +12,7 @@ export default class EventsPresenter {
   #pointsModel = null;
   #offersModel = null;
   #points = null;
+  #pointPresenters = new Map();
 
   constructor(container, pointsModel, offersModel) {
     this.#container = container;
@@ -21,62 +22,52 @@ export default class EventsPresenter {
 
   init() {
     this.#points = [...this.#pointsModel.points];
-    this.#renderPointsBoard();
+    this.#renderPointBoard();
   }
 
-  #renderPointsBoard = () => {
-    if (this.#points.length === 0) {
-      render(new TripEventsListEmptyView, this.#container);
-      return;
-    }
+  #renderNoEvents = () => {
+    render(new TripEventsListEmptyView, this.#container);
+  };
+
+  #renderSort = () => {
     render(this.#sortComponent, this.#container);
+  };
+
+  #renderPointList = () => {
     render(this.#listComponent, this.#container);
     for (let i = 0; i < this.#points.length; i++) {
-      this.#offersModel.currentPoint = this.#points[i]; //сеттер currentPoint
+      this.#offersModel.currentPoint = this.#points[i]; //сеттер модели по получению текущей точки
       this.#renderPoint(this.#points[i], this.#offersModel.currentOffersById, this.#offersModel.currentOffersByType, this.#listComponent);
     }
   };
 
-  #renderPoint = (point, offersById, offersByType, container) => {
-    const eventItemComponent = new TripEventItemView(point, offersById, offersByType);
-    const eventEditComponent = new EventEditView(point, offersById, offersByType);
-
-    const replacePointToEdit = () => {
-      replace(eventEditComponent, eventItemComponent);
-    };
-
-    const replaceEditToPoint = () => {
-      replace(eventItemComponent, eventEditComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceEditToPoint();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    eventItemComponent.setClickHandler(() => replacePointToEdit());
-
-    eventEditComponent.setEditFormSubmitHandler(() => {
-      replaceEditToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    eventEditComponent.setEditClickHandler(() => {
-      replaceEditToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    eventEditComponent.setEditResetClickHandler(() => {
-      replaceEditToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    document.addEventListener('keydown', onEscKeyDown);
-
-    render(eventItemComponent, container.element);
+  #renderPointBoard = () => {
+    if (this.#points.length === 0) {
+      this.#renderNoEvents();
+      return;
+    }
+    this.#renderSort();
+    this.#renderPointList();
   };
 
+  #renderPoint = (point, offersById, offersByType, container) => {
+    const pointPresenter = new PointPresenter(container, this.#handlePointChange, this.#handleChangeMode);
+    pointPresenter.init(point, offersById, offersByType);
+    this.#pointPresenters.set(point.id, pointPresenter);
+  };
+
+  #handlePointChange = (updatedPoint) => {
+    this.#points = updateItem(this.#points, updatedPoint);
+    this.#offersModel.currentPoint = updatedPoint;
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#offersModel.currentOffersById,  this.#offersModel.currentOffersByType);
+  };
+
+  #handleChangeMode = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetCurrentEdit());
+  };
+
+  #clearPointList = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  };
 }

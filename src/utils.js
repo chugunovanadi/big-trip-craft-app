@@ -41,4 +41,18 @@ const getRandomBoolean = () => Math.random() < 0.5;
 const isDestinationEmpty = (point) => !(!point.destination || Object.keys(point.destination).length === 0);
 const isOffersEmpty = (point) => !(!Array.isArray(point.offers) || point.offers.length === 0);
 
-export {isDestinationEmpty, isOffersEmpty, getRandomInteger, getRandomValue, getRandomBoolean, formatEventDuration, humanizeEventFullDate, humanizeEventDateDay, humanizeEventDateTime};
+const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
+};
+
+export {updateItem, isDestinationEmpty, isOffersEmpty, getRandomInteger, getRandomValue, getRandomBoolean, formatEventDuration, humanizeEventFullDate, humanizeEventDateDay, humanizeEventDateTime};
