@@ -55,4 +55,8 @@ const updateItem = (items, update) => {
   ];
 };
 
-export {updateItem, isDestinationEmpty, isOffersEmpty, getRandomInteger, getRandomValue, getRandomBoolean, formatEventDuration, humanizeEventFullDate, humanizeEventDateDay, humanizeEventDateTime};
+const sortByDay = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+const sortByPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
+const sortByTime = (pointA, pointB) => (dayjs.duration(dayjs(pointA.dateFrom).diff(dayjs(pointA.dateTo)))) - (dayjs.duration(dayjs(pointB.dateFrom).diff(dayjs(pointB.dateTo))));
+
+export {sortByDay, sortByPrice, sortByTime, updateItem, isDestinationEmpty, isOffersEmpty, getRandomInteger, getRandomValue, getRandomBoolean, formatEventDuration, humanizeEventFullDate, humanizeEventDateDay, humanizeEventDateTime};
