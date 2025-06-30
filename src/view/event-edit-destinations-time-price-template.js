@@ -1,5 +1,5 @@
 import { humanizeEventFullDate } from '../utils';
-const createEventEditDestinationTimePriceTemplate = (point) => {
+const createEventEditDestinationTimePriceTemplate = (point, destinations) => {
   const {basePrice, dateFrom, dateTo, destination, type} = point;
 
   return `
@@ -9,9 +9,7 @@ const createEventEditDestinationTimePriceTemplate = (point) => {
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${destination.name} list="destination-list-1">
                     <datalist id="destination-list-1">
-                      <option value=""></option>
-                      <option value=""></option>
-                      <option value=""></option>
+                    ${destinations.map((dest) => `<option value="${dest.name}"><option>`).join('')}
                     </datalist>
                   </div>
 

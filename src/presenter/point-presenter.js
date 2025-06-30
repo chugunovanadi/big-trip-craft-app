@@ -17,6 +17,7 @@ export default class PointPresenter {
   #changeData = null;
   #mode = MODE.DEFAULT;
   #changeMode = null;
+  #destinations = null;
 
   constructor(container, changeData, changeMode){
     this.#container = container;
@@ -24,16 +25,17 @@ export default class PointPresenter {
     this.#changeMode = changeMode;
   }
 
-  init = (point, offersById, offersByType) => {
+  init = (point, offersById, offersByType, destinations) => {
     this.#point = point;
     this.#offersByType = offersByType;
     this.#offersById = offersById;
+    this.#destinations = destinations;
 
     const prevEventComponent = this.#eventComponent;
     const prevEditComponent = this.#editComponent;
 
     this.#eventComponent = new TripEventItemView(this.#point, this.#offersById);
-    this.#editComponent = new EventEditView(this.#point, this.#offersById, this.#offersByType);
+    this.#editComponent = new EventEditView(this.#point, this.#offersById, this.#offersByType, this.#destinations);
 
     this.#eventComponent.setRollupClickHandler(() => this.#replaceEventToEdit());
     this.#editComponent.setEditFormSubmitHandler(() => {

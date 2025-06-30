@@ -38,8 +38,8 @@ const getRandomValue = (items) => {
 
 const getRandomBoolean = () => Math.random() < 0.5;
 
-const isDestinationEmpty = (point) => !(!point.destination || Object.keys(point.destination).length === 0);
-const isOffersEmpty = (point) => !(!Array.isArray(point.offers) || point.offers.length === 0);
+const isDestinationEmpty = (point) => point.destination.description;
+const isOffersEmpty = (offersByType) => !(offersByType.offers.length === 0);
 
 const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);

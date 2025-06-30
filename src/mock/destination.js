@@ -1,35 +1,48 @@
-import { getRandomValue } from '../utils.js';
-
-const COUNT_DESTINATION = 15;
-const namesDestination = ['Tokyo', 'Osaka', 'Kyoto', 'Nara'];
-const descriptionsDestination = ['It blends ultra-modern skyscrapers with historic temples and traditional districts',
-  'A major economic center in the Kansai region and an important port city',
-  'Famous for traditional architecture, geishas, and tea ceremonies',
-  'An ancient capital of Japan, renowned for its historic temples, friendly deer in Nara Park, and the Great Buddha at Todai-ji Temple'
+const destinations = [
+  {
+    name: 'Tokyo',
+    description: 'Tokyo blends ultra-modern skyscrapers with historic temples and traditional districts.',
+    pictures: [
+      { src: 'img/photos/1.jpg', descriptionPicture: 'Modern cityscape of Tokyo' },
+      { src: 'img/photos/2.jpg', descriptionPicture: 'Historic temple in Tokyo' },
+      { src: 'img/photos/3.jpg', descriptionPicture: 'Traditional district in Tokyo' }
+    ]
+  },
+  {
+    name: 'Osaka',
+    description: 'Osaka is a major economic center in the Kansai region and an important port city.',
+    pictures: [
+      { src: 'img/photos/2.jpg', descriptionPicture: 'Osaka port area' },
+      { src: 'img/photos/3.jpg', descriptionPicture: 'Economic center of Osaka' },
+      { src: 'img/photos/4.jpg', descriptionPicture: 'Skyscrapers in Osaka' }
+    ]
+  },
+  {
+    name: 'Kyoto',
+    description: 'Kyoto is famous for its traditional architecture, geishas, and tea ceremonies.',
+    pictures: [
+      { src: 'img/photos/3.jpg', descriptionPicture: 'Traditional Kyoto street' },
+      { src: 'img/photos/4.jpg', descriptionPicture: 'Geisha district in Kyoto' },
+      { src: 'img/photos/1.jpg', descriptionPicture: 'Tea house in Kyoto' }
+    ]
+  },
+  {
+    name: 'Nara',
+    description: 'Nara is an ancient capital of Japan, renowned for its historic temples, friendly deer, and the Great Buddha at Todai-ji Temple.',
+    pictures: [
+      { src: 'img/photos/4.jpg', descriptionPicture: 'Great Buddha of Nara' },
+      { src: 'img/photos/2.jpg', descriptionPicture: 'Deer in Nara Park' },
+      { src: 'img/photos/1.jpg', descriptionPicture: 'Historic temple in Nara' }
+    ]
+  },
+  {
+    name: 'Nagasaki',
+    description: '',
+    pictures: []
+  },
 ];
-const picturesSrc = ['img/photos/1.jpg', 'img/photos/2.jpg', 'img/photos/3.jpg', 'img/photos/4.jpg'];
-const picturesDescriptions = ['ultra-modern skyscrapers with historic temples', 'important port city', 'traditional architecture', 'friendly deer in Nara Park'];
 
-const generateDestination = () => ({
-  description: getRandomValue(descriptionsDestination),
-  name: getRandomValue(namesDestination),
-  pictures: [
-    {
-      src: getRandomValue(picturesSrc),
-      descriptionPicture: getRandomValue(picturesDescriptions)
-    },
-    {
-      src: getRandomValue(picturesSrc),
-      descriptionPicture: getRandomValue(picturesDescriptions)
-    },
-    {
-      src: getRandomValue(picturesSrc),
-      descriptionPicture: getRandomValue(picturesDescriptions)
-    },
-  ]
-});
-
-const generateDestinations = () => Array.from({length: COUNT_DESTINATION}, generateDestination);
+const generateDestinations = () => destinations;
 
 export{generateDestinations};
 

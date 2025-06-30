@@ -5,7 +5,7 @@ import { createEventEditOffersTemplate } from './event-edit-offers-template';
 import { createEventEditDescriptionDestinationTemplate } from './event-edit-description-destination-template';
 import { isDestinationEmpty, isOffersEmpty } from '../utils.js';
 
-const createEventEditTemplate = (point = {}, offersById, offersByType) => {
+const createEventEditTemplate = (point = {}, offersById, offersByType, destinations) => {
   const {
     id = '',
     basePrice = null,
@@ -20,11 +20,11 @@ const createEventEditTemplate = (point = {}, offersById, offersByType) => {
  <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${createEventTypeTemplate(point)}
-      ${createEventEditDestinationTimePriceTemplate(point)}
+      ${createEventEditDestinationTimePriceTemplate(point, destinations)}
     </header>
 
     <section class="event__details">
-      ${isOffersEmpty(point) ? createEventEditOffersTemplate(offersById, offersByType) : ''}
+      ${isOffersEmpty(offersByType) ? createEventEditOffersTemplate(offersById, offersByType) : ''}
       ${isDestinationEmpty(point) ? createEventEditDescriptionDestinationTemplate(point) : ''}
     </section>
  </form>
@@ -35,16 +35,18 @@ export default class EventEditView extends AbstractView {
   #point = null;
   #offersById = null;
   #offersByType = null;
+  #destinations = null;
 
-  constructor(point, offersById, offersByType){
+  constructor(point, offersById, offersByType, destinations){
     super();
     this.#point=point;
     this.#offersById=offersById;
     this.#offersByType = offersByType;
+    this.#destinations = destinations;
   }
 
   get template(){
-    return createEventEditTemplate(this.#point, this.#offersById, this.#offersByType);
+    return createEventEditTemplate(this.#point, this.#offersById, this.#offersByType, this.#destinations);
   }
 
   setEditFormSubmitHandler = (callback) => {

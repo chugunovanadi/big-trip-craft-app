@@ -13,15 +13,17 @@ export default class EventsPresenter {
   #container = null;
   #pointsModel = null;
   #offersModel = null;
+  #destinationsModel = null;
   #points = null;
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
   #sourcedPoints = [];
 
-  constructor(container, pointsModel, offersModel) {
+  constructor(container, pointsModel, offersModel, destinationsModel) {
     this.#container = container;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
+    this.#destinationsModel = destinationsModel;
   }
 
   init() {
@@ -50,7 +52,7 @@ export default class EventsPresenter {
     render(this.#listComponent, this.#container);
     for (let i = 0; i < this.#points.length; i++) {
       this.#offersModel.currentPoint = this.#points[i]; //сеттер модели по получению текущей точки
-      this.#renderPoint(this.#points[i], this.#offersModel.currentOffersById, this.#offersModel.currentOffersByType, this.#listComponent);
+      this.#renderPoint(this.#points[i], this.#offersModel.currentOffersById, this.#offersModel.currentOffersByType, this.#listComponent, this.#destinationsModel.destinations);
     }
   };
 
@@ -63,9 +65,9 @@ export default class EventsPresenter {
     this.#renderPointList();
   };
 
-  #renderPoint = (point, offersById, offersByType, container) => {
+  #renderPoint = (point, offersById, offersByType, container, destinations) => {
     const pointPresenter = new PointPresenter(container, this.#handlePointChange, this.#handleChangeMode);
-    pointPresenter.init(point, offersById, offersByType);
+    pointPresenter.init(point, offersById, offersByType, destinations);
     this.#pointPresenters.set(point.id, pointPresenter);
   };
 

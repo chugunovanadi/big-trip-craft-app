@@ -4,6 +4,7 @@ import EventsPresenter from './presenter/events-presenter';
 import { render, RenderPosition } from './framework/render.js';
 import OffersModel from './model/offer-model.js';
 import PointsModel from './model/point-model.js';
+import DestinationsModel from './model/destination-model.js';
 
 
 const tripMainHeaderContainer = document.querySelector('.trip-main');
@@ -11,7 +12,8 @@ const tripControlsFiltersContainer = document.querySelector('.trip-controls__fil
 const tripEventsContainer = document.querySelector('.trip-events');
 const pointsModel = new PointsModel();
 const offersModel =  new OffersModel();
-const eventsPresenter = new EventsPresenter(tripEventsContainer, pointsModel, offersModel);
+const destinationsModel = new DestinationsModel();
+const eventsPresenter = new EventsPresenter(tripEventsContainer, pointsModel, offersModel, destinationsModel);
 
 render(new TripMainInfoView(pointsModel.points), tripMainHeaderContainer, RenderPosition.AFTERBEGIN);
 render(new TripFiltersView, tripControlsFiltersContainer);
