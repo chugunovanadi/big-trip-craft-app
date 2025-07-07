@@ -38,7 +38,7 @@ const getRandomValue = (items) => {
 
 const getRandomBoolean = () => Math.random() < 0.5;
 
-const isDestinationEmpty = (point) => point.destination.description;
+const isDestinationEmpty = (destination) => destination.description;
 const isOffersEmpty = (offersByType) => !(offersByType.offers.length === 0);
 
 const updateItem = (items, update) => {

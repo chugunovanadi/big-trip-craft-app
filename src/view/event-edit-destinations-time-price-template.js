@@ -1,8 +1,5 @@
 import { humanizeEventFullDate } from '../utils';
-const createEventEditDestinationTimePriceTemplate = (point, destinations) => {
-  const {basePrice, dateFrom, dateTo, destination, type} = point;
-
-  return `
+const createEventEditDestinationTimePriceTemplate = (basePrice, dateFrom, dateTo, destination, type, destinations) => `
                   <div class="event__field-group  event__field-group--destination">
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${type}
@@ -34,6 +31,6 @@ const createEventEditDestinationTimePriceTemplate = (point, destinations) => {
                   <button class="event__rollup-btn" type="button">
                     <span class="visually-hidden">Open event</span>
                   </button>
-`;};
+`;
 
 export {createEventEditDestinationTimePriceTemplate};

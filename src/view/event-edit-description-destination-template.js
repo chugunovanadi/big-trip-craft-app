@@ -1,5 +1,5 @@
-const createEventEditDescriptionDestinationTemplate = (point) => {
-  const {description, pictures} = point.destination;
+const createEventEditDescriptionDestinationTemplate = (destination) => {
+  const {description, pictures} = destination;
   const picturesMarkup = pictures.map(({src, descriptionPicture}) => `
   <img class="event__photo" src=${src} alt=${descriptionPicture}>
   `).join('');

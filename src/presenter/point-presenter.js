@@ -10,7 +10,6 @@ const MODE = {
 export default class PointPresenter {
   #container = null;
   #point = null;
-  #offersByType = null;
   #offersById = null;
   #eventComponent = null;
   #editComponent = null;
@@ -18,6 +17,7 @@ export default class PointPresenter {
   #mode = MODE.DEFAULT;
   #changeMode = null;
   #destinations = null;
+  #allOffers = null;
 
   constructor(container, changeData, changeMode){
     this.#container = container;
@@ -25,27 +25,27 @@ export default class PointPresenter {
     this.#changeMode = changeMode;
   }
 
-  init = (point, offersById, offersByType, destinations) => {
+  init = (point, offers, offersById, destinations) => {
     this.#point = point;
-    this.#offersByType = offersByType;
     this.#offersById = offersById;
     this.#destinations = destinations;
+    this.#allOffers = offers;
 
     const prevEventComponent = this.#eventComponent;
     const prevEditComponent = this.#editComponent;
 
     this.#eventComponent = new TripEventItemView(this.#point, this.#offersById);
-    this.#editComponent = new EventEditView(this.#point, this.#offersById, this.#offersByType, this.#destinations);
+    this.#editComponent = new EventEditView(this.#point, this.#allOffers, this.#destinations);
 
     this.#eventComponent.setRollupClickHandler(() => this.#replaceEventToEdit());
     this.#editComponent.setEditFormSubmitHandler(() => {
       this.#replaceEditToEvent();
     });
-    this.#editComponent.setEditClickHandler(() => {
-      this.#replaceEditToEvent();
+    this.#editComponent.setEditRollupClickHandler(() => {
+      this.resetCurrentEdit();
     });
     this.#editComponent.setEditResetClickHandler(() => {
-      this.#replaceEditToEvent();
+      this.resetCurrentEdit();
     });
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
@@ -83,6 +83,7 @@ export default class PointPresenter {
   #onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#editComponent.reset(this.#point, this.#allOffers, this.#destinations);
       this.#replaceEditToEvent();
     }
   };
@@ -98,6 +99,7 @@ export default class PointPresenter {
 
   resetCurrentEdit = () => {
     if (this.#mode !== MODE.DEFAULT) {
+      this.#editComponent.reset(this.#point, this.#allOffers, this.#destinations);
       this.#replaceEditToEvent();
     }
   };

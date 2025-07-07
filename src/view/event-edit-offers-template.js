@@ -1,13 +1,9 @@
-const createEventEditOffersTemplate = (offersById, offersByType) => {
+const createEventEditOffersTemplate = (idsByOffers, offersByType) => {
   const offersMarkup = offersByType.offers.map(({ titleOffer, priceOffer, id }) => {
-    const isChecked = offersById.some((offer) => offer.id === id) ? 'checked' : '';
+    const isChecked = idsByOffers.some((idByOffer) => idByOffer === id) ? 'checked' : '';
     return `
       <div class="event__offer-selector">
-        <input class="event__offer-checkbox visually-hidden"
-               id="event-offer-${id}"
-               type="checkbox"
-               name="event-offer-${id}"
-               ${isChecked}>
+        <input class="event__offer-checkbox visually-hidden" id="event-offer-${id}" type="checkbox" name="event-offer" ${isChecked}>
         <label class="event__offer-label" for="event-offer-${id}">
           <span class="event__offer-title">${titleOffer}</span>
           &plus;&euro;&nbsp;

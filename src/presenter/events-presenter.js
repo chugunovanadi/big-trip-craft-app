@@ -52,7 +52,7 @@ export default class EventsPresenter {
     render(this.#listComponent, this.#container);
     for (let i = 0; i < this.#points.length; i++) {
       this.#offersModel.currentPoint = this.#points[i]; //сеттер модели по получению текущей точки
-      this.#renderPoint(this.#points[i], this.#offersModel.currentOffersById, this.#offersModel.currentOffersByType, this.#listComponent, this.#destinationsModel.destinations);
+      this.#renderPoint(this.#points[i], this.#offersModel.allOffers , this.#offersModel.currentOffersById, this.#listComponent, this.#destinationsModel.destinations);
     }
   };
 
@@ -65,9 +65,9 @@ export default class EventsPresenter {
     this.#renderPointList();
   };
 
-  #renderPoint = (point, offersById, offersByType, container, destinations) => {
+  #renderPoint = (point, allOffers, offersById, container, destinations) => {
     const pointPresenter = new PointPresenter(container, this.#handlePointChange, this.#handleChangeMode);
-    pointPresenter.init(point, offersById, offersByType, destinations);
+    pointPresenter.init(point, allOffers, offersById, destinations);
     this.#pointPresenters.set(point.id, pointPresenter);
   };
 

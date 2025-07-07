@@ -4,6 +4,15 @@ export default class OffersModel {
   #allOffers = generateOffers();
   #point = null;
 
+  get allOffers() {
+    return this.#allOffers;
+  }
+
+  getOffersByType(type) {
+    const offersByType = this.#allOffers.find((offer) => offer.type === type);
+    return offersByType ? offersByType.offers : [];
+  }
+
   set currentPoint(newPoint) {
     this.#point = newPoint;
   }
@@ -23,7 +32,7 @@ export default class OffersModel {
     if (!this.#point || !this.#point.offers) {
       return [];
     }
-    const offersByType = this.currentOffersByType;
-    return offersByType.offers.filter((obj) => this.#point.offers.includes(obj.id));
+    const availableForPointOffersByType = this.currentOffersByType;
+    return availableForPointOffersByType.offers.filter((obj) => this.#point.offers.includes(obj.id));
   }
 }
