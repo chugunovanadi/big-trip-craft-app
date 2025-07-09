@@ -4,6 +4,8 @@ import {createEventEditDestinationTimePriceTemplate} from './event-edit-destinat
 import { createEventEditOffersTemplate } from './event-edit-offers-template';
 import { createEventEditDescriptionDestinationTemplate } from './event-edit-description-destination-template';
 import { isDestinationEmpty, isOffersEmpty } from '../utils.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 const BLANK_NEW_POINT = {
   offers: [],
@@ -35,6 +37,9 @@ const createEventEditTemplate = (data) => {
 `;};
 
 export default class EventEditView extends AbstractStatefulView {
+  #datepickerStart = null;
+  #datepickerEnd = null;
+
   constructor(point = BLANK_NEW_POINT, allOffers, destinations){
     super();
     this._state = EventEditView.transformPointToState(point, allOffers, destinations);
@@ -44,6 +49,19 @@ export default class EventEditView extends AbstractStatefulView {
   get template(){
     return createEventEditTemplate(this._state);
   }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
+  };
 
   static transformPointToState = (point, allOffers, destinations) => ({
     ...point,
@@ -73,6 +91,8 @@ export default class EventEditView extends AbstractStatefulView {
     if (offersElement) {
       offersElement.addEventListener('change', this.#changeInputOffersHandler);
     }
+    this.#setDatepickerDateStart();
+    this.#setDatepickerDateEnd();
   };
 
   _restoreHandlers = () => {
@@ -80,6 +100,48 @@ export default class EventEditView extends AbstractStatefulView {
     this.setEditFormSubmitHandler(this._callback.formSubmit);
     this.setEditRollupClickHandler(this._callback.clickRollupEdit);
     this.setEditResetClickHandler(this._callback.clickReset);
+  };
+
+  #setDatepickerDateStart = () => {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/Y H:i',
+        // eslint-disable-next-line camelcase
+        time_24hr: true,
+        defaultDate: this._state.dateFrom,
+        onChange: this.#startDateChangeHandler,
+      },
+    );
+  };
+
+  #setDatepickerDateEnd = () => {
+    this.#datepickerEnd = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/Y H:i',
+        // eslint-disable-next-line camelcase
+        time_24hr: true,
+        defaultDate: this._state.dateTo,
+        onChange: this.#endDateChangeHandler,
+        minDate: this._state.dateFrom,
+      },
+    );
+
+  };
+
+  #startDateChangeHandler = ([selectedStartDate]) => {
+    this.updateElement({
+      dateFrom: selectedStartDate,
+    });
+  };
+
+  #endDateChangeHandler = ([selectedEndDate]) => {
+    this.updateElement({
+      dateTo: selectedEndDate,
+    });
   };
 
   #changeInputTypeHandler = (evt) => {
